@@ -27,6 +27,7 @@
     width: 300px;
     border: 1px solid black;
     height: 200px;
+    left: 0px;
     margin-left: 50px;
     top: 652px;
     text-align: center;
@@ -70,6 +71,10 @@
     position: relative;
     margin: 0 0 0 0;
     height: 100px;
+}
+
+.number {
+    font-size: 60px;
 }
 
 body {
