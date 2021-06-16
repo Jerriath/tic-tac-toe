@@ -4,7 +4,15 @@ let gameBoard = (function(){
     
     //cacheDOM
     let container = document.querySelector("#container");
-    
+    let clearBtn = document.querySelector("#clear");
+    let endMsg = document.querySelector("#endMsg");
+
+    //Bind eventListeners
+    clearBtn.addEventListener("click", function(e) {
+        clearBoard();
+        initBoard();
+        render();
+    });
 
     function initBoard() {
         let cols = board[0].length;
@@ -65,7 +73,7 @@ let gameBoard = (function(){
             board[i][j].value = value;
             render();
             let status = checkGame();
-
+            displayEnd(status);
         }
     }
 
@@ -83,7 +91,7 @@ let gameBoard = (function(){
                 {
                     break;
                 }
-                if (i = 2)
+                else if (i == 2)
                 {
                     if (value == "x")
                     {
@@ -106,7 +114,7 @@ let gameBoard = (function(){
                 {
                     break;
                 }
-                if (j = 2)
+                else if (j == 2)
                 {
                     if (value == "x")
                     {
@@ -121,7 +129,7 @@ let gameBoard = (function(){
         }
         //Check diagonals
         let value = board[0][0].value;
-        if (value == board[1][1].value && value == board[2][2])
+        if (value == board[1][1].value && value == board[2][2].value && value != null)
         {
             if (value == "x")
             {
@@ -133,7 +141,7 @@ let gameBoard = (function(){
             }
         }
         value = board[0][2].value;
-        if (value == board[1][1].value && value == board[2][0])
+        if (value == board[1][1].value && value == board[2][0].value)
         {
             if (value == "x")
             {
@@ -161,7 +169,7 @@ let gameBoard = (function(){
         {
             for (let j = 0; j < cols; j++)
             {
-                if (board[i][j] == null)
+                if (board[i][j].value == null)
                 {
                     return false;
                 }
@@ -177,17 +185,20 @@ let gameBoard = (function(){
         {
             return;
         }
-        if (status == 1)
+        else if (status == 1)
         {
-            
+            endMsg.textContent = "Player Wins!";
+            endMsg.style.visibility = "visible";
         }
-        if (status == 2)
+        else if (status == 2)
         {
-            
+            endMsg.textContent = "Computer Wins!";
+            endMsg.style.visibility = "visible";
         }
-        if (status == 3)
+        else if (status == 3)
         {
-            
+            endMsg.textContent = "Draw!";
+            endMsg.style.visibility = "visible";
         }
     }
 
@@ -203,6 +214,8 @@ let gameBoard = (function(){
                 board[i][j].value = null;
             }
         }
+        endMsg.textContent = "";
+        endMsg.style.visibility = "hidden";
     }
 
     //Returns object with public functions
@@ -213,15 +226,6 @@ let gameBoard = (function(){
     }
 })();
 
-
-let game = (function() {
-
-    //cache DOM
-    let playerScore = document.querySelector("#playerScore");
-    let compScore = document.querySelector("#compScore");
-    let clearBtn = document.querySelector("#clear");
-
-});
 
 
 
