@@ -5,14 +5,9 @@ let gameBoard = (function(){
     //cacheDOM
     let container = document.querySelector("#container");
     let clearBtn = document.querySelector("#clear");
-    let endMsg = document.querySelector("#endMsg");
+    let playerName = document.querySelector("#playerName");
 
-    //Bind eventListeners
-    clearBtn.addEventListener("click", function(e) {
-        clearBoard();
-        initBoard();
-        render();
-    });
+//---------------PUBLIC METHODS---------------
 
     function initBoard() {
         let cols = board[0].length;
@@ -20,10 +15,16 @@ let gameBoard = (function(){
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
                 board[i][j].square = _makeSquare(); //makes squares
-                board[i][j].square.addEventListener("click", selectSquare.bind(event, i, j));
+                board[i][j].square.addEventListener("click", _selectSquare.bind(event, i, j));
             }
         }
     }
+
+    clearBtn.addEventListener("click", function(e) {
+        clearBoard();
+        initBoard();
+        render();
+    });
 
     //Function for rendering the board data
     function render() {
@@ -35,6 +36,23 @@ let gameBoard = (function(){
             }
         }
     };
+
+    //Function to clear board
+    function clearBoard() {
+        let cols = board.length;
+        let rows = board[0].length;
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                board[i][j].square.removeEventListener("click", _selectSquare.bind(event, i, j));
+                board[i][j].square.remove();
+                board[i][j].square = null;
+                board[i][j].value = null;
+            }
+        }
+        events.emit("boardClear", true);
+    }
+
+//---------------PRIVATE METHODS---------------
 
     //Factory function for newSquares
     function _makeSquare() {
@@ -61,7 +79,7 @@ let gameBoard = (function(){
     }
 
     //Function to run for event Listener
-    function selectSquare(i, j)  {
+    function _selectSquare(i, j)  {
         let value = "x";
         _chooseSquare(value, i, j);
     }
@@ -72,15 +90,15 @@ let gameBoard = (function(){
         {
             board[i][j].value = value;
             render();
-            let status = checkGame();
-            displayEnd(status);
+            _checkGame();
         }
     }
 
     //Function to check if game is over; returns 1=playerWin, 2=compWin, 3=draw 0=notOver
-    function checkGame() {
+    function _checkGame() {
         let cols = board[0].length;
         let rows = board.length;
+        let returnValue = null;
         //Check columns
         for (let j = 0; j < cols; j++)
         {
@@ -95,11 +113,15 @@ let gameBoard = (function(){
                 {
                     if (value == "x")
                     {
-                        return 1;
+                        returnValue = 1;
+                        events.emit("gameEnded", returnValue);
+                        return;
                     }
                     if (value == "o")
                     {
-                        return 2;
+                        returnValue = 2;
+                        events.emit("gameEnded", returnValue);
+                        return;
                     }
                 }
             }
@@ -118,11 +140,15 @@ let gameBoard = (function(){
                 {
                     if (value == "x")
                     {
-                        return 1;
+                        returnValue = 1;
+                        events.emit("gameEnded", returnValue);
+                        return;
                     }
                     if (value == "o")
                     {
-                        return 2;
+                        returnValue = 2;
+                        events.emit("gameEnded", returnValue);
+                        return;
                     }
                 }
             }
@@ -133,11 +159,15 @@ let gameBoard = (function(){
         {
             if (value == "x")
             {
-                return 1;
+                returnValue = 1;
+                events.emit("gameEnded", returnValue);
+                return;
             }
             else if (value == "o")
             {
-                return 2;
+                returnValue = 2;
+                events.emit("gameEnded", returnValue);
+                return;
             }
         }
         value = board[0][2].value;
@@ -145,24 +175,30 @@ let gameBoard = (function(){
         {
             if (value == "x")
             {
-                return 1;
+                returnValue = 1;
+                events.emit("gameEnded", returnValue);
+                return;
             }
             else if (value == "o")
             {
-                return 2;
+                returnValue = 2;
+                events.emit("gameEnded", returnValue);
+                return;
             }
         }
         //Check draw
-        let over = checkFull();
+        let over = _checkFull();
         if (over)
         {
-            return 3;
+            returnValue = 3;
+            events.emit("gameEnded", returnValue);
+            return;
         }
-        return 0;
+        return;
     }
 
     //Function to check if board is full
-    function checkFull() {
+    function _checkFull() {
         let cols = board[0].length;
         let rows = board.length;
         for (let i = 0; i < rows; i++)
@@ -176,46 +212,6 @@ let gameBoard = (function(){
             }
         }
         return true;
-    }
-
-    //Function to add a message if game is over
-    function displayEnd(status)
-    {
-        if (status == 0)
-        {
-            return;
-        }
-        else if (status == 1)
-        {
-            endMsg.textContent = "Player Wins!";
-            endMsg.style.visibility = "visible";
-        }
-        else if (status == 2)
-        {
-            endMsg.textContent = "Computer Wins!";
-            endMsg.style.visibility = "visible";
-        }
-        else if (status == 3)
-        {
-            endMsg.textContent = "Draw!";
-            endMsg.style.visibility = "visible";
-        }
-    }
-
-    //Function to clear board
-    function clearBoard() {
-        let cols = board.length;
-        let rows = board[0].length;
-        for (let i = 0; i < rows; i++) {
-            for (let j = 0; j < cols; j++) {
-                board[i][j].square.removeEventListener("click", selectSquare.bind(event, i, j));
-                board[i][j].square.remove();
-                board[i][j].square = null;
-                board[i][j].value = null;
-            }
-        }
-        endMsg.textContent = "";
-        endMsg.style.visibility = "hidden";
     }
 
     //Returns object with public functions
