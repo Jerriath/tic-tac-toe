@@ -9,6 +9,7 @@ let welcome = (function() {
     //Bind listener
     submit.addEventListener("click", setName);
     
+    //Function to change the default name "Player" to user input
     function setName() {
         let name = nameInput.value;
         if (name == "")
@@ -17,6 +18,7 @@ let welcome = (function() {
         }
         playerName.textContent = name;
         welcomePage.style.display = "none";
+        events.emit("gameStart", true);
     }
 
 })();

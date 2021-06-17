@@ -7,12 +7,12 @@ let game = (function() {
     let endMsg = document.querySelector("#endMsg");
 
     //Bind Events and Listeners
-    events.on("gameEnded", _displayEnd);
+    events.on("gameEnded", displayEnd);
     events.on("gameEnded", changeScore);
     events.on("boardClear", clearEndMsg);
 
     //Function to add a message if game is over
-    function _displayEnd(status)
+    function displayEnd(status)
     {
         if (status == 1)
         {

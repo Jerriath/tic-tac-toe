@@ -7,6 +7,10 @@ let gameBoard = (function(){
     let clearBtn = document.querySelector("#clear");
     let playerName = document.querySelector("#playerName");
 
+    //Bind Events
+    events.on("gameStart", initBoard);
+    events.on("gameStart", render);
+
 //---------------PUBLIC METHODS---------------
 
     function initBoard() {
@@ -213,18 +217,4 @@ let gameBoard = (function(){
         }
         return true;
     }
-
-    //Returns object with public functions
-    return {
-        render: render,
-        initBoard: initBoard,
-        clearBoard: clearBoard,
-    }
 })();
-
-
-
-
-
-gameBoard.initBoard();
-gameBoard.render();
