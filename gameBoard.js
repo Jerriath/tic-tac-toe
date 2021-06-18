@@ -19,7 +19,7 @@ let gameBoard = (function(){
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
                 board[i][j].square = _makeSquare(); //makes squares
-                board[i][j].square.addEventListener("click", _selectSquare.bind(event, i, j));
+                board[i][j].square.addEventListener("click", selectSquare.bind(event, i, j));
             }
         }
     }
@@ -47,7 +47,7 @@ let gameBoard = (function(){
         let rows = board[0].length;
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
-                board[i][j].square.removeEventListener("click", _selectSquare.bind(event, i, j));
+                board[i][j].square.removeEventListener("click", selectSquare.bind(event, i, j));
                 board[i][j].square.remove();
                 board[i][j].square = null;
                 board[i][j].value = null;
@@ -83,23 +83,44 @@ let gameBoard = (function(){
     }
 
     //Function to run for event Listener
-    function _selectSquare(i, j)  {
+    function selectSquare(i, j)  {
         let value = "x";
-        _chooseSquare(value, i, j);
+        chooseSquare(value, i, j);
+        events.emit("playerSelected", true);
+    }
+
+    //Function for computer to select a square
+    function compSelectSquare(i, j) {
+        let value = "o";
+        chooseSquare(value, i, j);
+    }
+
+    //Function that returns the state of the board (needed for comp ai)
+    function returnBoardState() { 
+        let boardState = [];
+        let cols = board[0].length;
+        let rows = board.length;
+        for (let i = 0; i < rows; i++) {
+            let x = board[i][0].value; //Variables represent values of each row before pushing to array
+            let y = board[i][1].value;
+            let z = board[i][2].value;
+            boardState.push([x, y, z]);
+        }
+        return boardState;
     }
 
     //Function to add markers on the board
-    function _chooseSquare(value, i, j) {
+    function chooseSquare(value, i, j) {
         if (board[i][j].value == null)
         {
             board[i][j].value = value;
             render();
-            _checkGame();
+            checkGame();
         }
     }
 
     //Function to check if game is over; returns 1=playerWin, 2=compWin, 3=draw 0=notOver
-    function _checkGame() {
+    function checkGame() {
         let cols = board[0].length;
         let rows = board.length;
         let returnValue = null;
@@ -191,7 +212,7 @@ let gameBoard = (function(){
             }
         }
         //Check draw
-        let over = _checkFull();
+        let over = checkFull();
         if (over)
         {
             returnValue = 3;
@@ -202,7 +223,7 @@ let gameBoard = (function(){
     }
 
     //Function to check if board is full
-    function _checkFull() {
+    function checkFull() {
         let cols = board[0].length;
         let rows = board.length;
         for (let i = 0; i < rows; i++)
@@ -216,5 +237,9 @@ let gameBoard = (function(){
             }
         }
         return true;
+    }
+    return {
+        compSelectSquare: compSelectSquare,
+        returnBoardState: returnBoardState,
     }
 })();
