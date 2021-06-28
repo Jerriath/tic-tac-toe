@@ -10,6 +10,7 @@ let gameBoard = (function(){
     //Bind Events
     events.on("gameStart", initBoard);
     events.on("gameStart", render);
+    events.on("compSelect", compSelectSquare);
 
 //---------------PUBLIC METHODS---------------
 
@@ -92,9 +93,9 @@ let gameBoard = (function(){
     }
 
     //Function for computer to select a square
-    function compSelectSquare(i, j) {
+    function compSelectSquare(move) {
         let value = "o";
-        chooseSquare(value, i, j);
+        chooseSquare(value, move.i, move.j);
     }
 
     //Function that returns the state of the board (needed for comp ai)
@@ -242,7 +243,7 @@ let gameBoard = (function(){
         return true;
     }
     return {
-        compSelectSquare: compSelectSquare,
         returnBoardState: returnBoardState,
+
     }
 })();
