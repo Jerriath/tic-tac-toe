@@ -22,7 +22,7 @@
     margin: auto;
     position: absolute;
     left: 0; right: 0;
-    top: 600px;
+    top: 550px;
     font-size: 30px;
 }
 
@@ -30,7 +30,7 @@
     margin: auto;
     position: absolute;
     left: 0; right: 0;
-    top: 650px;
+    top: 600px;
     height: 30px;
     width: 250px;
     font-size: 25px;
@@ -41,7 +41,7 @@
     margin: auto;
     position: absolute;
     left: 0; right: 0;
-    top: 700px;
+    top: 750px;
     height: 40px;
     width: 150px;
     font-size: 30px;
@@ -134,6 +134,18 @@
 
 .number {
     font-size: 60px;
+}
+
+.radioButtons
+{
+    margin: auto;
+    position: absolute;
+    left: 0; right: 0;
+    top: 675px;
+    height: 30px;
+    width: 250px;
+    font-size: 25px;
+    border-radius: 10px;
 }
 
 body {

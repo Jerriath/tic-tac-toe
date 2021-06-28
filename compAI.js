@@ -1,8 +1,28 @@
 let compAI = (function () {
 
+    let difficulty = "";
     //Bind Events
-    events.on("playerSelected", chooseHard);
+    events.on("playerSelected", makeMove);
+    events.on("setDifficulty", setDifficulty)
     
+    //One function to make move (regardless of diff) so pubsub can use
+    function makeMove()
+    {
+        if (difficulty == "easy")
+        {
+            chooseEasy();
+        }
+        else if (difficulty == "hard")
+        {
+            chooseHard();
+        }
+    }
+
+    //Function to set the difficulty
+    function setDifficulty(value)
+    {
+        difficulty = value;
+    }
 
     //Function for easy computer to select a square
     function chooseEasy()
