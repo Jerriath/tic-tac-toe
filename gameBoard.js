@@ -56,7 +56,6 @@ let gameBoard = (function(){
         events.emit("boardClear", true);
     }
 
-//---------------PRIVATE METHODS---------------
 
     //Factory function for newSquares
     function _makeSquare() {
@@ -85,8 +84,11 @@ let gameBoard = (function(){
     //Function to run for event Listener
     function selectSquare(i, j)  {
         let value = "x";
-        chooseSquare(value, i, j);
-        events.emit("playerSelected", true);
+        let boardState = chooseSquare(value, i, j);
+        if (boardState == 0) 
+        {
+            events.emit("playerSelected", true);
+        }
     }
 
     //Function for computer to select a square
@@ -115,7 +117,8 @@ let gameBoard = (function(){
         {
             board[i][j].value = value;
             render();
-            checkGame();
+            let boardState = checkGame();
+            return boardState;
         }
     }
 
@@ -140,13 +143,13 @@ let gameBoard = (function(){
                     {
                         returnValue = 1;
                         events.emit("gameEnded", returnValue);
-                        return;
+                        return returnValue;
                     }
                     if (value == "o")
                     {
                         returnValue = 2;
                         events.emit("gameEnded", returnValue);
-                        return;
+                        return returnValue;
                     }
                 }
             }
@@ -167,13 +170,13 @@ let gameBoard = (function(){
                     {
                         returnValue = 1;
                         events.emit("gameEnded", returnValue);
-                        return;
+                        return returnValue;
                     }
                     if (value == "o")
                     {
                         returnValue = 2;
                         events.emit("gameEnded", returnValue);
-                        return;
+                        return returnValue;
                     }
                 }
             }
@@ -186,13 +189,13 @@ let gameBoard = (function(){
             {
                 returnValue = 1;
                 events.emit("gameEnded", returnValue);
-                return;
+                return returnValue;
             }
             else if (value == "o")
             {
                 returnValue = 2;
                 events.emit("gameEnded", returnValue);
-                return;
+                return returnValue;
             }
         }
         value = board[0][2].value;
@@ -202,13 +205,13 @@ let gameBoard = (function(){
             {
                 returnValue = 1;
                 events.emit("gameEnded", returnValue);
-                return;
+                return returnValue;
             }
             else if (value == "o")
             {
                 returnValue = 2;
                 events.emit("gameEnded", returnValue);
-                return;
+                return returnValue;
             }
         }
         //Check draw
@@ -217,9 +220,9 @@ let gameBoard = (function(){
         {
             returnValue = 3;
             events.emit("gameEnded", returnValue);
-            return;
+            return returnValue;
         }
-        return;
+        return 0;
     }
 
     //Function to check if board is full
